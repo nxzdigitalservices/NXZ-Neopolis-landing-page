@@ -111,7 +111,7 @@ export default function App() {
 
     // Track SPA pageview in Google Analytics
     if (typeof window !== 'undefined' && typeof (window as any).gtag === 'function') {
-      (window as any).gtag('config', 'G-Q97F19173X', {
+      (window as any).gtag('config', 'G-DK9PN9M05H', {
         page_path: routeState.pathname,
         page_title: meta.title,
       });
