@@ -207,6 +207,14 @@ export const PropertyEnquiryForm: React.FC<PropertyEnquiryFormProps> = ({
       setMessage('');
       setFieldErrors({});
 
+      // Track Meta Pixel Lead event
+      if (typeof window !== 'undefined' && typeof (window as any).fbq === 'function') {
+        (window as any).fbq('track', 'Lead', {
+          content_name: sanitizedProject,
+          content_category: 'Real Estate'
+        });
+      }
+
       if (onSuccess) {
         onSuccess();
       } else if (typeof window !== 'undefined') {

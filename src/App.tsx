@@ -109,12 +109,17 @@ export default function App() {
     const meta = getPageMetadata(routeState.pathname, routeState.project);
     updateDocumentSEO(meta);
 
-    // Track SPA pageview in Google Analytics
-    if (typeof window !== 'undefined' && typeof (window as any).gtag === 'function') {
-      (window as any).gtag('config', 'G-DK9PN9M05H', {
-        page_path: routeState.pathname,
-        page_title: meta.title,
-      });
+    // Track SPA pageview in Google Analytics & Meta Pixel
+    if (typeof window !== 'undefined') {
+      if (typeof (window as any).gtag === 'function') {
+        (window as any).gtag('config', 'G-DK9PN9M05H', {
+          page_path: routeState.pathname,
+          page_title: meta.title,
+        });
+      }
+      if (typeof (window as any).fbq === 'function') {
+        (window as any).fbq('track', 'PageView');
+      }
     }
   }, [routeState.pathname, routeState.project]);
 
