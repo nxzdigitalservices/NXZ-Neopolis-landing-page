@@ -1,10 +1,11 @@
+// server.ts
 import express from "express";
 import path from "path";
 import fs from "fs";
-const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxG6c7yggSzX17KYZ_76gEJo9Fsh1W8vitwtqyAXQgr5coWIloEVm7lF36leDcZYmw/exec";
-const DEFAULT_IMAGE = "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&h=630&q=85";
-const BRAND_NAME = "Neopolis Luxury Residences";
-const PROJECTS = [
+var GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxG6c7yggSzX17KYZ_76gEJo9Fsh1W8vitwtqyAXQgr5coWIloEVm7lF36leDcZYmw/exec";
+var DEFAULT_IMAGE = "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&h=630&q=85";
+var BRAND_NAME = "Neopolis Luxury Residences";
+var PROJECTS = [
   {
     id: "msn-neopolis",
     name: "MSN Neopolis",
