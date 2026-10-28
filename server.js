@@ -1,11 +1,110 @@
 import express from "express";
-import { createServer as createViteServer } from "vite";
 import path from "path";
 import fs from "fs";
-import { PROJECTS_DATA } from "./src/data/projectsData";
-import { getProjectBySlug, getProjectSlug } from "./src/utils/slug";
-import { getPageMetadata } from "./src/utils/seo";
 const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxG6c7yggSzX17KYZ_76gEJo9Fsh1W8vitwtqyAXQgr5coWIloEVm7lF36leDcZYmw/exec";
+const DEFAULT_IMAGE = "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&h=630&q=85";
+const BRAND_NAME = "Neopolis Luxury Residences";
+const PROJECTS = [
+  {
+    id: "msn-neopolis",
+    name: "MSN Neopolis",
+    headline: "Upcoming Landmark Luxury Residential Development in Neopolis, Kokapet",
+    description: "Upcoming 56-storey landmark residential development by MSN Group on a prime 7-acre parcel in Neopolis, Kokapet, Hyderabad featuring 3 and 4 BHK luxury residences and an iconic 2,30,000 sq.ft. clubhouse.",
+    location: "Neopolis, Kokapet, Hyderabad",
+    propertyType: "Ultra-Luxury High-Rise Residences",
+    configurations: ["3 BHK", "4 BHK"],
+    startingPrice: "\u20B93.26 Cr*",
+    image: "/projects/msn-neopolis/1.webp",
+    areaRange: "2,424 \u2013 4,545 sq.ft.",
+    reraNumber: "TS RERA Under Registration"
+  },
+  {
+    id: "sattva-lakeridge",
+    name: "Sattva Lakeridge",
+    headline: "High-Rise Luxury in Hyderabad\u2019s Most Promising Location",
+    description: "Ultra-luxury lakefront residential community by Sattva Group spanning 9.5 acres with 6 soaring 37-storey towers overlooking Osman Sagar lake in Neopolis, Kokapet.",
+    location: "Neopolis, Kokapet, Hyderabad",
+    propertyType: "Ultra-Luxury High-Rise Apartments",
+    configurations: ["3 BHK", "4 BHK", "5 BHK"],
+    startingPrice: "\u20B92.95 Cr*",
+    image: "/projects/sattva-lakeridge/1.webp",
+    areaRange: "2,744 \u2013 5,472 sq.ft.",
+    reraNumber: "P02400005820"
+  },
+  {
+    id: "brigade-barcelona",
+    name: "Brigade Barcelona",
+    headline: "Spanish-Inspired Architecture. Contemporary Luxury.",
+    description: "Spanish-inspired 52-storey luxury condominium tower by Brigade Group in Neopolis Phase III, Kokapet, Hyderabad featuring 666 curated residences and 1.5 Lakh sq.ft. mega clubhouse.",
+    location: "Neopolis Phase III, Kokapet, Hyderabad",
+    propertyType: "Spanish-Themed Luxury Condominiums",
+    configurations: ["3 BHK", "3.5 BHK", "4 BHK"],
+    startingPrice: "\u20B93.10 Cr*",
+    image: "/projects/brigade-barcelona/1.webp",
+    areaRange: "2,790 \u2013 3,764 sq.ft.",
+    reraNumber: "P02400007812"
+  },
+  {
+    id: "godrej-epoque",
+    name: "Godrej Epoque",
+    headline: "An Iconic Expression of Contemporary Luxury",
+    description: "Prestigious 57-storey luxury landmark by Godrej Properties featuring Art Deco geometry, high-altitude Sky Bridge, and palatial residences in Neopolis, Kokapet.",
+    location: "Neopolis, Kokapet, Hyderabad",
+    propertyType: "Art Deco Iconic Sky Residences",
+    configurations: ["3 BHK", "4 BHK"],
+    startingPrice: "\u20B93.80 Cr*",
+    image: "/projects/godrej-epoque/1.webp",
+    areaRange: "3,200 \u2013 4,800 sq.ft.",
+    reraNumber: "P02400006240"
+  },
+  {
+    id: "sattva-lago-phase-2",
+    name: "Sattva Lago \u2014 Phase 2",
+    headline: "Elevated Living. Expansive Spaces.",
+    description: "Waterfront master development across 10 acres by Sattva Group with G+46 storey towers and large-format sky residences with private terraces in Neopolis, Kokapet.",
+    location: "Neopolis, Kokapet, Hyderabad",
+    propertyType: "Waterfront Large-Format Residences",
+    configurations: ["3 BHK", "3.5 BHK", "4 BHK"],
+    startingPrice: "\u20B93.25 Cr*",
+    image: "/projects/sattva-lago-phase-2/1.webp",
+    areaRange: "3,100 \u2013 4,900 sq.ft.",
+    reraNumber: "P02400008450"
+  },
+  {
+    id: "cascades",
+    name: "Cascades",
+    headline: "A New Architectural Icon on the Horizon",
+    description: "Biophilic high-rise residences in Sector 2 of Neopolis, Kokapet featuring cascading water features, vertical green gardens, and luxury 3 & 4 BHK apartments.",
+    location: "Neopolis, Kokapet, Hyderabad",
+    propertyType: "Biophilic High-Rise Residences",
+    configurations: ["3 BHK", "4 BHK"],
+    startingPrice: "\u20B93.15 Cr*",
+    image: "/projects/cascades/1.webp",
+    areaRange: "2,900 \u2013 4,200 sq.ft.",
+    reraNumber: "Registration In Progress"
+  },
+  {
+    id: "rise-by-9",
+    name: "Rise By 9",
+    headline: "Your Next Luxury Address Could Be Here",
+    description: "Ultra-exclusive boutique sky villas in Neopolis, Kokapet featuring low-density luxury with only 2 residences per floor and private elevator lobbies.",
+    location: "Neopolis, Kokapet, Hyderabad",
+    propertyType: "Bespoke Sky Residences",
+    configurations: ["4 & 5 BHK"],
+    startingPrice: "Contact for Price",
+    image: "https://images.unsplash.com/photo-1479839672679-a46483c0e7c8?auto=format&fit=crop&w=1200&q=85",
+    areaRange: "3,500 \u2013 6,000 sq.ft.",
+    reraNumber: "Registration In Progress"
+  }
+];
+function slugify(text) {
+  return text.toLowerCase().trim().replace(/[^\w\s-]/g, "").replace(/[\s_-]+/g, "-").replace(/^-+|-+$/g, "");
+}
+function findProjectBySlug(slug) {
+  if (!slug) return void 0;
+  const clean = slugify(slug);
+  return PROJECTS.find((p) => slugify(p.id) === clean) || PROJECTS.find((p) => slugify(p.name) === clean) || PROJECTS.find((p) => slugify(p.id).startsWith(clean) || clean.startsWith(slugify(p.id)));
+}
 function getBaseUrl(req) {
   if (process.env.APP_URL) {
     return process.env.APP_URL.replace(/\/+$/, "");
@@ -16,36 +115,145 @@ function getBaseUrl(req) {
 }
 function generateSitemapXml(baseUrl) {
   const today = (/* @__PURE__ */ new Date()).toISOString().split("T")[0];
-  const staticUrls = [
+  const urls = [
     { loc: `${baseUrl}/`, priority: "1.0", changefreq: "daily" },
     { loc: `${baseUrl}/properties`, priority: "0.9", changefreq: "daily" },
-    { loc: `${baseUrl}/contact`, priority: "0.7", changefreq: "monthly" }
+    { loc: `${baseUrl}/contact`, priority: "0.7", changefreq: "monthly" },
+    ...PROJECTS.map((p) => ({
+      loc: `${baseUrl}/properties/${p.id}`,
+      priority: "0.8",
+      changefreq: "weekly"
+    }))
   ];
-  const projectUrls = PROJECTS_DATA.map((p) => ({
-    loc: `${baseUrl}/properties/${getProjectSlug(p)}`,
-    priority: "0.8",
-    changefreq: "weekly"
-  }));
-  const allUrls = [...staticUrls, ...projectUrls];
-  const xmlEntries = allUrls.map(
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${urls.map(
     (u) => `  <url>
     <loc>${u.loc}</loc>
     <lastmod>${today}</lastmod>
     <changefreq>${u.changefreq}</changefreq>
     <priority>${u.priority}</priority>
   </url>`
-  ).join("\n");
-  return `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${xmlEntries}
+  ).join("\n")}
 </urlset>`;
+}
+function resolveSeoMetadata(cleanPath, project, baseUrl) {
+  if (project) {
+    const canonical2 = `${baseUrl}/properties/${project.id}`;
+    const title2 = `${project.name} | Luxury Apartments in Neopolis, Kokapet`;
+    const description2 = `${project.name} in Neopolis, Kokapet: ${project.configurations.join(", ")} ultra-luxury apartments from ${project.startingPrice}. Floor plans, price lists & site visits.`.slice(0, 160);
+    const image = project.image.startsWith("http") ? project.image : `${baseUrl}${project.image}`;
+    return {
+      title: title2,
+      description: description2,
+      canonical: canonical2,
+      robots: "index, follow",
+      og: { title: title2, description: description2, url: canonical2, image, type: "article" },
+      twitter: { card: "summary_large_image", title: title2, description: description2, image },
+      jsonLd: {
+        "@context": "https://schema.org",
+        "@type": "ApartmentComplex",
+        name: project.name,
+        description: project.headline || project.description,
+        url: canonical2,
+        image,
+        address: {
+          "@type": "PostalAddress",
+          streetAddress: project.location,
+          addressLocality: "Kokapet",
+          addressRegion: "Telangana",
+          postalCode: "500075",
+          addressCountry: "IN"
+        },
+        numberOfRooms: project.configurations.join(", "),
+        floorSize: { "@type": "QuantitativeValue", value: project.areaRange }
+      }
+    };
+  }
+  if (cleanPath === "/properties") {
+    const canonical2 = `${baseUrl}/properties`;
+    const title2 = "Properties in Neopolis, Kokapet | Luxury High-Rise Residences";
+    const description2 = "Explore all 7 luxury residential towers in Neopolis, Kokapet, Hyderabad: MSN Neopolis, Sattva Lakeridge, Brigade Barcelona & more with verified prices.".slice(0, 160);
+    return {
+      title: title2,
+      description: description2,
+      canonical: canonical2,
+      robots: "index, follow",
+      og: { title: title2, description: description2, url: canonical2, image: DEFAULT_IMAGE, type: "website" },
+      twitter: { card: "summary_large_image", title: title2, description: description2, image: DEFAULT_IMAGE },
+      jsonLd: {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        name: "Luxury Residential Projects in Neopolis, Kokapet",
+        url: canonical2,
+        numberOfItems: PROJECTS.length
+      }
+    };
+  }
+  if (cleanPath === "/contact") {
+    const canonical2 = `${baseUrl}/contact`;
+    const title2 = "Contact Us | Neopolis Luxury Real Estate Advisory, Kokapet";
+    const description2 = "Contact our certified Neopolis Kokapet property advisors for developer cost sheets, VIP site visits, unit availability, and investment consultation.".slice(0, 160);
+    return {
+      title: title2,
+      description: description2,
+      canonical: canonical2,
+      robots: "index, follow",
+      og: { title: title2, description: description2, url: canonical2, image: DEFAULT_IMAGE, type: "website" },
+      twitter: { card: "summary_large_image", title: title2, description: description2, image: DEFAULT_IMAGE },
+      jsonLd: { "@context": "https://schema.org", "@type": "ContactPage", name: title2, url: canonical2 }
+    };
+  }
+  if (cleanPath === "/thank-you") {
+    const canonical2 = `${baseUrl}/thank-you`;
+    const title2 = "Thank You | Neopolis Luxury Residences";
+    const description2 = "Thank you for your enquiry. A dedicated Neopolis luxury property advisor is reviewing your request and will connect with you shortly.";
+    return {
+      title: title2,
+      description: description2,
+      canonical: canonical2,
+      robots: "noindex, follow",
+      og: { title: title2, description: description2, url: canonical2, image: DEFAULT_IMAGE, type: "website" },
+      twitter: { card: "summary", title: title2, description: description2, image: DEFAULT_IMAGE },
+      jsonLd: { "@context": "https://schema.org", "@type": "WebPage", name: title2 }
+    };
+  }
+  if (cleanPath === "/404") {
+    const canonical2 = `${baseUrl}/404`;
+    const title2 = "Page Not Found (404) | Neopolis Luxury Residences";
+    const description2 = "The requested property or page could not be found. Explore current luxury residential apartments in Neopolis, Kokapet, Hyderabad.";
+    return {
+      title: title2,
+      description: description2,
+      canonical: canonical2,
+      robots: "noindex, follow",
+      og: { title: title2, description: description2, url: canonical2, image: DEFAULT_IMAGE, type: "website" },
+      twitter: { card: "summary", title: title2, description: description2, image: DEFAULT_IMAGE },
+      jsonLd: { "@context": "https://schema.org", "@type": "WebPage", name: title2 }
+    };
+  }
+  const canonical = `${baseUrl}/`;
+  const title = "Neopolis Luxury Living | Premier Hyderabad Real Estate";
+  const description = "Exclusive luxury residential properties in Neopolis, Kokapet, Hyderabad: MSN Neopolis, Brigade Barcelona, Godrej Epoque & Sattva Lago Phase 2.".slice(0, 160);
+  return {
+    title,
+    description,
+    canonical,
+    robots: "index, follow",
+    og: { title, description, url: canonical, image: DEFAULT_IMAGE, type: "website" },
+    twitter: { card: "summary_large_image", title, description, image: DEFAULT_IMAGE },
+    jsonLd: {
+      "@context": "https://schema.org",
+      "@type": "RealEstateAgent",
+      name: BRAND_NAME,
+      url: canonical,
+      image: DEFAULT_IMAGE
+    }
+  };
 }
 function injectMetadataIntoHtml(html, meta) {
   let modified = html;
-  modified = modified.replace(
-    /<title>.*?<\/title>/i,
-    `<title>${meta.title}</title>`
-  );
+  modified = modified.replace(/<title>.*?<\/title>/i, `<title>${meta.title}</title>`);
   if (/<meta\s+name="description"[^>]*>/i.test(modified)) {
     modified = modified.replace(
       /<meta\s+name="description"[^>]*>/i,
@@ -59,54 +267,41 @@ function injectMetadataIntoHtml(html, meta) {
     );
   }
   if (/<meta\s+name="robots"[^>]*>/i.test(modified)) {
-    modified = modified.replace(
-      /<meta\s+name="robots"[^>]*>/i,
-      `<meta name="robots" content="${meta.robots}" />`
-    );
+    modified = modified.replace(/<meta\s+name="robots"[^>]*>/i, `<meta name="robots" content="${meta.robots}" />`);
   } else {
-    modified = modified.replace(
-      "</head>",
-      `    <meta name="robots" content="${meta.robots}" />
-  </head>`
-    );
+    modified = modified.replace("</head>", `    <meta name="robots" content="${meta.robots}" />
+  </head>`);
   }
   if (/<link\s+rel="canonical"[^>]*>/i.test(modified)) {
-    modified = modified.replace(
-      /<link\s+rel="canonical"[^>]*>/i,
-      `<link rel="canonical" href="${meta.canonical}" />`
-    );
+    modified = modified.replace(/<link\s+rel="canonical"[^>]*>/i, `<link rel="canonical" href="${meta.canonical}" />`);
   } else {
-    modified = modified.replace(
-      "</head>",
-      `    <link rel="canonical" href="${meta.canonical}" />
-  </head>`
-    );
+    modified = modified.replace("</head>", `    <link rel="canonical" href="${meta.canonical}" />
+  </head>`);
   }
-  const socialMetaTags = `
-    <!-- Dynamic Open Graph & Social Cards -->
+  const tags = `
     <meta property="og:title" content="${meta.og.title.replace(/"/g, "&quot;")}" />
     <meta property="og:description" content="${meta.og.description.replace(/"/g, "&quot;")}" />
     <meta property="og:url" content="${meta.og.url}" />
     <meta property="og:image" content="${meta.og.image}" />
     <meta property="og:type" content="${meta.og.type}" />
-    <meta property="og:site_name" content="${meta.og.siteName.replace(/"/g, "&quot;")}" />
+    <meta property="og:site_name" content="${BRAND_NAME}" />
     <meta name="twitter:card" content="${meta.twitter.card}" />
     <meta name="twitter:title" content="${meta.twitter.title.replace(/"/g, "&quot;")}" />
     <meta name="twitter:description" content="${meta.twitter.description.replace(/"/g, "&quot;")}" />
     <meta name="twitter:image" content="${meta.twitter.image}" />
-    <!-- Structured Data JSON-LD -->
     <script id="structured-data-jsonld" type="application/ld+json">
 ${JSON.stringify(meta.jsonLd, null, 2)}
     </script>
 `;
   modified = modified.replace(/<meta\s+property="og:[^>]*>/gi, "").replace(/<meta\s+name="twitter:[^>]*>/gi, "").replace(/<script\s+id="structured-data-jsonld"[^>]*>[\s\S]*?<\/script>/gi, "");
-  modified = modified.replace("</head>", `${socialMetaTags}
+  modified = modified.replace("</head>", `${tags}
   </head>`);
   return modified;
 }
 async function startServer() {
   const app = express();
   const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3e3;
+  const isProduction = process.env.NODE_ENV === "production" || fs.existsSync(path.resolve(process.cwd(), "dist", "index.html"));
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   app.get("/robots.txt", (req, res) => {
@@ -122,24 +317,19 @@ Sitemap: ${baseUrl}/sitemap.xml
   });
   app.get("/sitemap.xml", (req, res) => {
     const baseUrl = getBaseUrl(req);
-    const sitemapXml = generateSitemapXml(baseUrl);
     res.type("application/xml");
-    res.send(sitemapXml);
+    res.send(generateSitemapXml(baseUrl));
   });
   app.post("/api/enquiry", async (req, res) => {
     try {
       const payload = req.body;
-      console.log("Forwarding enquiry to Google Sheets:", payload);
       const scriptResponse = await fetch(GOOGLE_APPS_SCRIPT_URL, {
         method: "POST",
-        headers: {
-          "Content-Type": "text/plain;charset=utf-8"
-        },
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
         body: JSON.stringify(payload),
         redirect: "follow"
       });
       const responseText = await scriptResponse.text();
-      console.log("Google Apps Script response:", responseText);
       let parsedData = {};
       try {
         parsedData = JSON.parse(responseText);
@@ -152,7 +342,6 @@ Sitemap: ${baseUrl}/sitemap.xml
         data: parsedData
       });
     } catch (error) {
-      console.error("Error in /api/enquiry:", error);
       return res.status(500).json({
         success: false,
         message: "Failed to forward enquiry to Google Sheets.",
@@ -163,7 +352,7 @@ Sitemap: ${baseUrl}/sitemap.xml
   app.get("/api/health", (req, res) => {
     res.json({ status: "ok", timestamp: (/* @__PURE__ */ new Date()).toISOString() });
   });
-  if (process.env.NODE_ENV === "production") {
+  if (isProduction) {
     const distPath = path.resolve(process.cwd(), "dist");
     const indexHtmlPath = path.resolve(distPath, "index.html");
     app.use(express.static(distPath, { index: false }));
@@ -176,13 +365,13 @@ Sitemap: ${baseUrl}/sitemap.xml
         let matchedProject = null;
         if (cleanPath.startsWith("/properties/")) {
           const slug = cleanPath.replace(/^\/properties\/?/, "");
-          matchedProject = getProjectBySlug(slug) || null;
+          matchedProject = findProjectBySlug(slug) || null;
         }
-        const isKnownStaticRoute = cleanPath === "/" || cleanPath === "/properties" || cleanPath === "/contact" || cleanPath === "/thank-you";
-        const isKnownPropertyRoute = cleanPath.startsWith("/properties/") && !!matchedProject;
-        const isNotFound = !isKnownStaticRoute && !isKnownPropertyRoute;
+        const isKnownStatic = cleanPath === "/" || cleanPath === "/properties" || cleanPath === "/contact" || cleanPath === "/thank-you";
+        const isKnownProperty = cleanPath.startsWith("/properties/") && !!matchedProject;
+        const isNotFound = !isKnownStatic && !isKnownProperty;
         const effectivePath = isNotFound ? "/404" : cleanPath;
-        const meta = getPageMetadata(effectivePath, matchedProject, baseUrl);
+        const meta = resolveSeoMetadata(effectivePath, matchedProject, baseUrl);
         html = injectMetadataIntoHtml(html, meta);
         if (isNotFound) {
           res.status(404);
@@ -193,6 +382,7 @@ Sitemap: ${baseUrl}/sitemap.xml
       }
     });
   } else {
+    const { createServer: createViteServer } = await import("vite");
     const vite = await createViteServer({
       server: {
         middlewareMode: true,
@@ -213,18 +403,18 @@ Sitemap: ${baseUrl}/sitemap.xml
         let matchedProject = null;
         if (cleanPath.startsWith("/properties/")) {
           const slug = cleanPath.replace(/^\/properties\/?/, "");
-          matchedProject = getProjectBySlug(slug) || null;
+          matchedProject = findProjectBySlug(slug) || null;
         }
-        const isKnownStaticRoute = cleanPath === "/" || cleanPath === "/properties" || cleanPath === "/contact" || cleanPath === "/thank-you";
-        const isKnownPropertyRoute = cleanPath.startsWith("/properties/") && !!matchedProject;
-        const isNotFound = !isKnownStaticRoute && !isKnownPropertyRoute;
+        const isKnownStatic = cleanPath === "/" || cleanPath === "/properties" || cleanPath === "/contact" || cleanPath === "/thank-you";
+        const isKnownProperty = cleanPath.startsWith("/properties/") && !!matchedProject;
+        const isNotFound = !isKnownStatic && !isKnownProperty;
         const effectivePath = isNotFound ? "/404" : cleanPath;
-        const meta = getPageMetadata(effectivePath, matchedProject, baseUrl);
+        const meta = resolveSeoMetadata(effectivePath, matchedProject, baseUrl);
         template = injectMetadataIntoHtml(template, meta);
         if (isNotFound) {
           res.status(404);
         }
-        res.set({ "Content-Type": "text/html" }).end(template);
+        res.status(res.statusCode || 200).set({ "Content-Type": "text/html" }).end(template);
       } catch (e) {
         vite.ssrFixStacktrace(e);
         next(e);
