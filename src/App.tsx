@@ -108,6 +108,14 @@ export default function App() {
   useEffect(() => {
     const meta = getPageMetadata(routeState.pathname, routeState.project);
     updateDocumentSEO(meta);
+
+    // Track SPA pageview in Google Analytics
+    if (typeof window !== 'undefined' && typeof (window as any).gtag === 'function') {
+      (window as any).gtag('config', 'G-Q97F19173X', {
+        page_path: routeState.pathname,
+        page_title: meta.title,
+      });
+    }
   }, [routeState.pathname, routeState.project]);
 
   // Handle ESC key to easily close the enquiry modal & lock background scrolling
