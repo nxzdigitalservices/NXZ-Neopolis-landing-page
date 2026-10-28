@@ -1,0 +1,6 @@
+{
+  "name": "Neopolis Luxury Living | Premier Hyderabad Real Estate",
+  "description": "Exclusive luxury residential properties in Neopolis, Kokapet, Hyderabad: Brigade Barcelona, Godrej Epoque, and Sattva Lago Phase 2.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <script>
+      (function() {
+        try {
+          var _fetch = window.fetch;
+          Object.defineProperty(window, 'fetch', {
+            get: function() {
+              return _fetch;
+            },
+            set: function(val) {
+              _fetch = val;
+            },
+            configurable: true,
+            enumerable: true
+          });
+        } catch (e) {
+          // Ignore if environment forbids redefinition
+        }
+      })();
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Neopolis Luxury Living | Premier Hyderabad Real Estate</title>
+    <meta name="description" content="Exclusive luxury residential properties in Neopolis, Kokapet, Hyderabad: Brigade Barcelona, Godrej Epoque, and Sattva Lago Phase 2." />
+    <meta property="og:title" content="Neopolis Luxury Living | Premier Hyderabad Real Estate" />
+    <meta property="og:description" content="Exclusive luxury residential properties in Neopolis, Kokapet, Hyderabad: Brigade Barcelona, Godrej Epoque, and Sattva Lago Phase 2." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  </head>
+  <body class="bg-white text-slate-900 antialiased selection:bg-blue-600 selection:text-white">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+
