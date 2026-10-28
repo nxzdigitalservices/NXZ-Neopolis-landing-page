@@ -62,6 +62,25 @@ export const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({
       {/* Main Layout Container: Full-width single column in both mobile & desktop view */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-8 pb-16 space-y-8 sm:space-y-12">
         
+        {/* Breadcrumb Navigation for SEO & Context */}
+        <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs text-slate-500 font-medium">
+          <button
+            onClick={onBackToHome}
+            className="hover:text-blue-600 transition-colors cursor-pointer"
+          >
+            Home
+          </button>
+          <span>/</span>
+          <button
+            onClick={onNavigateProperties || onBackToHome}
+            className="hover:text-blue-600 transition-colors cursor-pointer"
+          >
+            Properties
+          </button>
+          <span>/</span>
+          <span className="text-slate-900 font-bold truncate max-w-xs sm:max-w-md">{project.name}</span>
+        </nav>
+
         {/* 1. Header Metadata & Quick Facts */}
         <div className="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-xs space-y-4">
           <div className="flex flex-wrap items-center gap-2 pt-1">
@@ -552,7 +571,7 @@ export const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({
               <p className="text-sm text-slate-500 mt-0.5">Compare other premium residential towers in Kokapet.</p>
             </div>
             <button
-              onClick={onBackToHome}
+              onClick={onNavigateProperties || onBackToHome}
               className="text-sm font-semibold text-blue-600 hover:underline cursor-pointer"
             >
               View All {PROJECTS_DATA.length} Projects →

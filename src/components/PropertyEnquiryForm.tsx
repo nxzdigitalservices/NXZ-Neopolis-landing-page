@@ -209,13 +209,11 @@ export const PropertyEnquiryForm: React.FC<PropertyEnquiryFormProps> = ({
 
       if (onSuccess) {
         onSuccess();
-      }
-
-      // Navigate to Thank You page upon successful submission
-      setTimeout(() => {
-        window.location.hash = 'thank-you';
+      } else if (typeof window !== 'undefined') {
+        window.history.pushState({}, '', '/thank-you');
+        window.dispatchEvent(new PopStateEvent('popstate'));
         window.scrollTo({ top: 0, behavior: 'smooth' });
-      }, 250);
+      }
     } catch (err: any) {
       console.error('Submission encountered error:', err);
       setStatusMessage({

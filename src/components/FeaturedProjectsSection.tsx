@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ProjectData } from '../data/projectsData';
+import { getProjectSlug } from '../utils/slug';
 import { MapPin, Building, ArrowRight, Check, Home, Shield, Sparkles } from 'lucide-react';
 
 interface FeaturedProjectsSectionProps {
@@ -83,19 +84,27 @@ export const FeaturedProjectsSection: React.FC<FeaturedProjectsSectionProps> = (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredProjects.map((project) => {
             const hasImgError = imageErrors[project.id];
+            const slug = getProjectSlug(project);
+            const propertyUrl = `/properties/${slug}`;
 
             return (
               <div
                 key={project.id}
-                onClick={() => onSelectProjectDetails(project)}
-                className="group relative bg-white border border-slate-200 hover:border-blue-300 rounded-2xl overflow-hidden shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col cursor-pointer hover:-translate-y-1.5 focus-within:ring-2 focus-within:ring-blue-600"
+                className="group relative bg-white border border-slate-200 hover:border-blue-300 rounded-2xl overflow-hidden shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col hover:-translate-y-1.5 focus-within:ring-2 focus-within:ring-blue-600"
               >
-                {/* 1. Project Image Container */}
-                <div className="relative aspect-16/10 w-full overflow-hidden bg-slate-100">
+                {/* 1. Project Image Container with Link */}
+                <a
+                  href={propertyUrl}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onSelectProjectDetails(project);
+                  }}
+                  className="relative aspect-16/10 w-full overflow-hidden bg-slate-100 block cursor-pointer"
+                >
                   {!hasImgError ? (
                     <img
                       src={project.image}
-                      alt={project.imageAlt || project.name}
+                      alt={project.imageAlt || `${project.name} Luxury Apartments in Neopolis Kokapet`}
                       onError={() => handleImageError(project.id)}
                       referrerPolicy="no-referrer"
                       className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
@@ -136,7 +145,7 @@ export const FeaturedProjectsSection: React.FC<FeaturedProjectsSectionProps> = (
                     <div className="text-[10px] uppercase font-semibold text-slate-500 leading-none">Starting from</div>
                     <div className="text-base font-extrabold text-blue-700 leading-tight tabular-nums">{project.startingPrice}</div>
                   </div>
-                </div>
+                </a>
 
                 {/* 2. Card Content */}
                 <div className="p-6 flex-1 flex flex-col justify-between">
@@ -152,9 +161,18 @@ export const FeaturedProjectsSection: React.FC<FeaturedProjectsSectionProps> = (
                       </span>
                     </div>
 
-                    {/* Project Name */}
-                    <h3 className="text-2xl font-bold text-slate-900 group-hover:text-blue-600 transition-colors mb-1.5">
-                      {project.name}
+                    {/* Project Name Link */}
+                    <h3 className="text-2xl font-bold text-slate-900 mb-1.5">
+                      <a
+                        href={propertyUrl}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          onSelectProjectDetails(project);
+                        }}
+                        className="hover:text-blue-600 transition-colors cursor-pointer"
+                      >
+                        {project.name}
+                      </a>
                     </h3>
 
                     {/* Property Type description */}
@@ -203,9 +221,10 @@ export const FeaturedProjectsSection: React.FC<FeaturedProjectsSectionProps> = (
 
                   {/* Actions: View Project Details & Quick Enquire */}
                   <div className="pt-4 border-t border-slate-100 flex items-center gap-3">
-                    <button
+                    <a
+                      href={propertyUrl}
                       onClick={(e) => {
-                        e.stopPropagation();
+                        e.preventDefault();
                         onSelectProjectDetails(project);
                       }}
                       className={`flex-1 py-3 px-4 text-white text-sm font-semibold rounded-xl shadow-xs hover:shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer ${
@@ -214,15 +233,13 @@ export const FeaturedProjectsSection: React.FC<FeaturedProjectsSectionProps> = (
                           : 'bg-blue-600 hover:bg-blue-700'
                       }`}
                     >
-                      <span>{project.id === 'rise-by-9' ? 'Launching Soon · Register' : 'View Project Details'}</span>
+                      <span>{project.id === 'rise-by-9' ? 'Launching Soon · View Details' : 'View Project Details'}</span>
                       <ArrowRight className="w-4 h-4" />
-                    </button>
+                    </a>
 
                     <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onEnquireProject(project);
-                      }}
+                      type="button"
+                      onClick={() => onEnquireProject(project)}
                       className="py-3 px-4 bg-slate-100 hover:bg-blue-50 hover:text-blue-600 text-slate-700 text-sm font-semibold rounded-xl border border-slate-200 transition-colors cursor-pointer whitespace-nowrap"
                       title="Enquire directly about this project"
                     >

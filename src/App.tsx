@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Navbar } from './components/Navbar';
 import { HeroSection } from './components/HeroSection';
 import { FeaturedProjectsSection } from './components/FeaturedProjectsSection';
@@ -12,41 +12,103 @@ import { PropertiesPage } from './components/PropertiesPage';
 import { ProjectDetailPage } from './components/ProjectDetailPage';
 import { ContactPage } from './components/ContactPage';
 import { ThankYouPage } from './components/ThankYouPage';
+import { NotFoundPage } from './components/NotFoundPage';
 import { PropertyEnquiryForm } from './components/PropertyEnquiryForm';
 import { RiseBy9Modal } from './components/RiseBy9Modal';
 import { PROJECTS_DATA, ProjectData } from './data/projectsData';
+import { getProjectBySlug, getProjectSlug } from './utils/slug';
+import { getPageMetadata, updateDocumentSEO } from './utils/seo';
 import { X } from 'lucide-react';
 
+type RouteType = 'home' | 'properties' | 'project' | 'contact' | 'thank-you' | 'not-found';
+
+interface ResolvedRoute {
+  type: RouteType;
+  pathname: string;
+  project: ProjectData | null;
+  requestedSlug?: string;
+}
+
+function resolveRouteFromPath(rawPathname: string): ResolvedRoute {
+  let cleanPath = rawPathname.split('?')[0].split('#')[0].trim();
+  if (cleanPath.length > 1 && cleanPath.endsWith('/')) {
+    cleanPath = cleanPath.slice(0, -1);
+  }
+  if (!cleanPath) cleanPath = '/';
+
+  if (cleanPath === '/' || cleanPath === '') {
+    return { type: 'home', pathname: '/', project: null };
+  }
+  if (cleanPath === '/properties') {
+    return { type: 'properties', pathname: '/properties', project: null };
+  }
+  if (cleanPath === '/contact') {
+    return { type: 'contact', pathname: '/contact', project: null };
+  }
+  if (cleanPath === '/thank-you') {
+    return { type: 'thank-you', pathname: '/thank-you', project: null };
+  }
+  if (cleanPath.startsWith('/properties/')) {
+    const slug = cleanPath.replace(/^\/properties\//, '');
+    const project = getProjectBySlug(slug);
+    if (project) {
+      return { type: 'project', pathname: `/properties/${getProjectSlug(project)}`, project };
+    } else {
+      return { type: 'not-found', pathname: cleanPath, project: null, requestedSlug: slug };
+    }
+  }
+  return { type: 'not-found', pathname: cleanPath, project: null, requestedSlug: cleanPath };
+}
+
 export default function App() {
-  const [currentRoute, setCurrentRoute] = useState<string>('/');
-  const [selectedProject, setSelectedProject] = useState<ProjectData | null>(null);
-  const [preselectedLeadProject, setPreselectedLeadProject] = useState<string>('all');
-  const [showMobileBottomBar, setShowMobileBottomBar] = useState(false);
+  const [routeState, setRouteState] = useState<ResolvedRoute>(() => {
+    const initialPath = typeof window !== 'undefined' ? window.location.pathname : '/';
+    return resolveRouteFromPath(initialPath);
+  });
+
+  const [preselectedLeadProject] = useState<string>('all');
   const [enquiryModalOpen, setEnquiryModalOpen] = useState(false);
   const [modalProjectName, setModalProjectName] = useState<string | undefined>(undefined);
   const [riseBy9ModalOpen, setRiseBy9ModalOpen] = useState(false);
 
-  // Ensure Home page is ALWAYS the main and default page on page load or refresh
-  useEffect(() => {
-    // Clear any hash from earlier sessions or refreshes so user always starts on the Home page
-    if (window.location.hash) {
-      try {
-        window.history.replaceState(null, '', window.location.pathname);
-      } catch {
-        window.location.hash = '';
+  // Client-side navigation handler: updates history.pushState and updates UI state
+  const navigateTo = useCallback((targetUrl: string, replace = false) => {
+    let cleanPath = targetUrl.split('?')[0].split('#')[0].trim();
+    if (cleanPath.length > 1 && cleanPath.endsWith('/')) {
+      cleanPath = cleanPath.slice(0, -1);
+    }
+    if (!cleanPath) cleanPath = '/';
+
+    if (typeof window !== 'undefined') {
+      if (replace) {
+        window.history.replaceState({}, '', cleanPath);
+      } else if (window.location.pathname !== cleanPath) {
+        window.history.pushState({}, '', cleanPath);
       }
     }
-    setCurrentRoute('/');
-    setSelectedProject(null);
+
+    const resolved = resolveRouteFromPath(cleanPath);
+    setRouteState(resolved);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
+  // Listen for browser Back and Forward button events (popstate)
   useEffect(() => {
-    const handleScroll = () => {
-      setShowMobileBottomBar(window.scrollY > 400);
+    const handlePopState = () => {
+      const resolved = resolveRouteFromPath(window.location.pathname);
+      setRouteState(resolved);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     };
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
   }, []);
+
+  // Update document head metadata, title, canonical link, and JSON-LD structured data on route changes
+  useEffect(() => {
+    const meta = getPageMetadata(routeState.pathname, routeState.project);
+    updateDocumentSEO(meta);
+  }, [routeState.pathname, routeState.project]);
 
   // Handle ESC key to easily close the enquiry modal & lock background scrolling
   useEffect(() => {
@@ -68,51 +130,9 @@ export default function App() {
     };
   }, [enquiryModalOpen]);
 
-  const navigateTo = (route: string) => {
-    if (route === '/') {
-      setSelectedProject(null);
-      setCurrentRoute('/');
-      if (window.location.hash) {
-        try {
-          window.history.replaceState(null, '', window.location.pathname);
-        } catch {
-          window.location.hash = '';
-        }
-      }
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    } else if (route === '/properties/') {
-      setSelectedProject(null);
-      setCurrentRoute('/properties/');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    } else if (route === '/contact/') {
-      setSelectedProject(null);
-      setCurrentRoute('/contact/');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    } else if (route === '/thank-you/') {
-      setSelectedProject(null);
-      setEnquiryModalOpen(false);
-      setCurrentRoute('/thank-you/');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    } else if (route.startsWith('/properties/')) {
-      const slug = route.replace('/properties/', '').replace('/', '');
-      const found = PROJECTS_DATA.find((p) => p.id === slug);
-      if (found) {
-        handleOpenProjectDetails(found);
-      }
-    }
-  };
-
   const scrollToSection = (sectionId: string) => {
-    if (currentRoute !== '/') {
-      setCurrentRoute('/');
-      setSelectedProject(null);
-      if (window.location.hash) {
-        try {
-          window.history.replaceState(null, '', window.location.pathname);
-        } catch {
-          window.location.hash = '';
-        }
-      }
+    if (routeState.type !== 'home') {
+      navigateTo('/');
       setTimeout(() => {
         const el = document.getElementById(sectionId);
         if (el) el.scrollIntoView({ behavior: 'smooth' });
@@ -126,13 +146,7 @@ export default function App() {
   };
 
   const handleOpenProjectDetails = (project: ProjectData) => {
-    if (project.id === 'rise-by-9') {
-      setRiseBy9ModalOpen(true);
-      return;
-    }
-    setSelectedProject(project);
-    setCurrentRoute(`/properties/${project.id}/`);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    navigateTo(`/properties/${getProjectSlug(project)}`);
   };
 
   const handleEnquireProject = (project: ProjectData) => {
@@ -145,8 +159,8 @@ export default function App() {
   };
 
   const handleOpenGeneralEnquiry = () => {
-    if (selectedProject) {
-      setModalProjectName(selectedProject.name);
+    if (routeState.project) {
+      setModalProjectName(routeState.project.name);
     } else {
       setModalProjectName(undefined);
     }
@@ -160,47 +174,55 @@ export default function App() {
         onOpenEnquiry={handleOpenGeneralEnquiry}
         onNavigateSection={scrollToSection}
         onNavigateRoute={navigateTo}
-        isProjectDetailView={!!selectedProject || currentRoute !== '/'}
+        isProjectDetailView={routeState.type !== 'home'}
         onBackToHome={() => navigateTo('/')}
       />
 
-      {/* 2. Main Page Content */}
+      {/* 2. Main Page Content with proper URL routing */}
       <main className="w-full overflow-x-hidden">
-        {selectedProject ? (
-          /* Individual Property Page */
+        {routeState.type === 'project' && routeState.project ? (
+          /* Individual Property Page at /properties/:slug */
           <ProjectDetailPage
-            project={selectedProject}
+            project={routeState.project}
             onBackToHome={() => navigateTo('/')}
-            onNavigateProperties={() => navigateTo('/properties/')}
+            onNavigateProperties={() => navigateTo('/properties')}
             onSelectProject={handleOpenProjectDetails}
           />
-        ) : currentRoute === '/properties/' ? (
-          /* Properties Listing Archive Page */
+        ) : routeState.type === 'properties' ? (
+          /* Properties Listing Archive Page at /properties */
           <PropertiesPage
             onSelectProject={handleOpenProjectDetails}
             onEnquireProject={handleEnquireProject}
             onNavigateHome={() => navigateTo('/')}
           />
-        ) : currentRoute === '/contact/' ? (
-          /* Dedicated Contact Page */
+        ) : routeState.type === 'contact' ? (
+          /* Dedicated Contact Page at /contact */
           <ContactPage
             onNavigateHome={() => navigateTo('/')}
-            onNavigateProperties={() => navigateTo('/properties/')}
+            onNavigateProperties={() => navigateTo('/properties')}
             preselectedProject={preselectedLeadProject}
           />
-        ) : currentRoute === '/thank-you/' ? (
-          /* Thank You Confirmation Page */
+        ) : routeState.type === 'thank-you' ? (
+          /* Dedicated Thank You Page at /thank-you */
           <ThankYouPage
             onNavigateHome={() => navigateTo('/')}
-            onNavigateProperties={() => navigateTo('/properties/')}
+            onNavigateProperties={() => navigateTo('/properties')}
             onSelectProject={handleOpenProjectDetails}
           />
+        ) : routeState.type === 'not-found' ? (
+          /* 404 Not Found Page for invalid URLs */
+          <NotFoundPage
+            onNavigateHome={() => navigateTo('/')}
+            onNavigateProperties={() => navigateTo('/properties')}
+            onSelectProject={handleOpenProjectDetails}
+            requestedSlug={routeState.requestedSlug}
+          />
         ) : (
-          /* Standalone Homepage (Default) */
+          /* Standalone Homepage at / */
           <>
             {/* 1. Hero Section */}
             <HeroSection
-              onExploreProjects={() => navigateTo('/properties/')}
+              onExploreProjects={() => navigateTo('/properties')}
               onOpenEnquiry={handleOpenGeneralEnquiry}
             />
 
@@ -213,10 +235,10 @@ export default function App() {
 
             {/* 3. Why Invest in Neopolis? */}
             <WhyInvestSection
-              onExploreProjects={() => navigateTo('/properties/')}
+              onExploreProjects={() => navigateTo('/properties')}
             />
 
-            {/* 4. Nearby Locations & Connectivity (No Map) */}
+            {/* 4. Nearby Locations & Connectivity */}
             <ConnectivitySection />
 
             {/* 5. About Neopolis, Kokapet */}
@@ -267,7 +289,6 @@ export default function App() {
                 </h3>
               </div>
 
-              {/* Close Button: prominent tap target (40x40px), high contrast */}
               <button
                 type="button"
                 onClick={() => setEnquiryModalOpen(false)}
@@ -290,7 +311,7 @@ export default function App() {
                 onClose={() => setEnquiryModalOpen(false)}
                 onSuccess={() => {
                   setEnquiryModalOpen(false);
-                  navigateTo('/thank-you/');
+                  navigateTo('/thank-you');
                 }}
               />
             </div>
@@ -304,15 +325,14 @@ export default function App() {
         onClose={() => setRiseBy9ModalOpen(false)}
         onSuccess={() => {
           setRiseBy9ModalOpen(false);
-          navigateTo('/thank-you/');
+          navigateTo('/thank-you');
         }}
       />
 
       {/* 6. Mobile App-Style Fixed Bottom Navigation Bar */}
-      {/* Permanently fixed across ALL pages in mobile view (always visible while scrolling) */}
       <div className="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200/90 px-4 py-3 shadow-[0_-4px_25px_rgba(0,0,0,0.12)] flex items-center justify-between gap-3 md:hidden">
         <button
-          onClick={() => navigateTo('/properties/')}
+          onClick={() => navigateTo('/properties')}
           className="flex-1 flex items-center justify-center py-3 px-4 bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-800 rounded-xl text-sm font-bold transition-all cursor-pointer shadow-xs"
         >
           <span>View Projects</span>
@@ -320,8 +340,8 @@ export default function App() {
 
         <button
           onClick={() => {
-            if (selectedProject) {
-              setModalProjectName(selectedProject.name);
+            if (routeState.project) {
+              setModalProjectName(routeState.project.name);
               setEnquiryModalOpen(true);
             } else {
               handleOpenGeneralEnquiry();

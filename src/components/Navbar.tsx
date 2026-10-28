@@ -21,9 +21,9 @@ export const Navbar: React.FC<NavbarProps> = ({
   const handleLinkClick = (sectionId: string) => {
     setMobileMenuOpen(false);
     if (sectionId === 'properties') {
-      onNavigateRoute('/properties/');
+      onNavigateRoute('/properties');
     } else if (sectionId === 'contact') {
-      onNavigateRoute('/contact/');
+      onNavigateRoute('/contact');
     } else {
       if (isProjectDetailView && onBackToHome) {
         onBackToHome();
@@ -41,8 +41,12 @@ export const Navbar: React.FC<NavbarProps> = ({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 sm:h-20 gap-3 sm:gap-4">
           {/* 1. Company Logo on the left */}
-          <button
-            onClick={() => onNavigateRoute('/')}
+          <a
+            href="/"
+            onClick={(e) => {
+              e.preventDefault();
+              onNavigateRoute('/');
+            }}
             className="flex items-center gap-2.5 sm:gap-3 text-left group focus:outline-hidden cursor-pointer"
           >
             <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-lg bg-blue-600 text-white flex items-center justify-center shadow-sm group-hover:bg-blue-700 transition-colors shrink-0">
@@ -56,22 +60,30 @@ export const Navbar: React.FC<NavbarProps> = ({
                 Kokapet, Hyderabad
               </span>
             </div>
-          </button>
+          </a>
 
           {/* 2. Minimal Navigation Links */}
           <nav className="hidden md:flex items-center gap-7 text-sm font-medium text-slate-600">
-            <button
-              onClick={() => onNavigateRoute('/')}
+            <a
+              href="/"
+              onClick={(e) => {
+                e.preventDefault();
+                onNavigateRoute('/');
+              }}
               className="hover:text-blue-600 transition-colors py-1 cursor-pointer"
             >
               Home
-            </button>
-            <button
-              onClick={() => onNavigateRoute('/properties/')}
+            </a>
+            <a
+              href="/properties"
+              onClick={(e) => {
+                e.preventDefault();
+                onNavigateRoute('/properties');
+              }}
               className="hover:text-blue-600 transition-colors py-1 cursor-pointer font-semibold text-slate-800"
             >
               Properties
-            </button>
+            </a>
             <button
               onClick={() => handleLinkClick('why-invest')}
               className="hover:text-blue-600 transition-colors py-1 cursor-pointer"
@@ -96,6 +108,16 @@ export const Navbar: React.FC<NavbarProps> = ({
             >
               FAQs
             </button>
+            <a
+              href="/contact"
+              onClick={(e) => {
+                e.preventDefault();
+                onNavigateRoute('/contact');
+              }}
+              className="hover:text-blue-600 transition-colors py-1 cursor-pointer"
+            >
+              Contact
+            </a>
           </nav>
 
           {/* 3. Action Button: Prominent "Enquire Now" */}
@@ -131,18 +153,28 @@ export const Navbar: React.FC<NavbarProps> = ({
       {mobileMenuOpen && (
         <div className="md:hidden border-t border-slate-200 bg-white px-4 pt-3 pb-6 shadow-xl space-y-3">
           <nav className="flex flex-col space-y-2 text-base font-medium text-slate-700">
-            <button
-              onClick={() => { setMobileMenuOpen(false); onNavigateRoute('/'); }}
+            <a
+              href="/"
+              onClick={(e) => {
+                e.preventDefault();
+                setMobileMenuOpen(false);
+                onNavigateRoute('/');
+              }}
               className="text-left py-2 px-3 rounded-md hover:bg-blue-50 hover:text-blue-600 transition-colors"
             >
               Home
-            </button>
-            <button
-              onClick={() => { setMobileMenuOpen(false); onNavigateRoute('/properties/'); }}
+            </a>
+            <a
+              href="/properties"
+              onClick={(e) => {
+                e.preventDefault();
+                setMobileMenuOpen(false);
+                onNavigateRoute('/properties');
+              }}
               className="text-left py-2 px-3 rounded-md hover:bg-blue-50 hover:text-blue-600 transition-colors font-bold text-blue-700"
             >
               Properties in Neopolis
-            </button>
+            </a>
             <button
               onClick={() => handleLinkClick('why-invest')}
               className="text-left py-2 px-3 rounded-md hover:bg-blue-50 hover:text-blue-600 transition-colors"
@@ -167,11 +199,25 @@ export const Navbar: React.FC<NavbarProps> = ({
             >
               Frequently Asked Questions
             </button>
+            <a
+              href="/contact"
+              onClick={(e) => {
+                e.preventDefault();
+                setMobileMenuOpen(false);
+                onNavigateRoute('/contact');
+              }}
+              className="text-left py-2 px-3 rounded-md hover:bg-blue-50 hover:text-blue-600 transition-colors"
+            >
+              Contact Us
+            </a>
           </nav>
 
           <div className="pt-3 border-t border-slate-100">
             <button
-              onClick={() => { setMobileMenuOpen(false); onOpenEnquiry(); }}
+              onClick={() => {
+                setMobileMenuOpen(false);
+                onOpenEnquiry();
+              }}
               className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-bold shadow-xs transition-colors cursor-pointer"
             >
               Enquire Now

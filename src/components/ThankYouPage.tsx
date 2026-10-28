@@ -39,23 +39,31 @@ export const ThankYouPage: React.FC<ThankYouPageProps> = ({
           </p>
 
           {/* Quick Breadcrumbs */}
-          <div className="flex items-center justify-center gap-2 text-xs text-slate-400 mt-6 font-medium">
-            <button
-              onClick={onNavigateHome}
+          <nav aria-label="Breadcrumb" className="flex items-center justify-center gap-2 text-xs text-slate-400 mt-6 font-medium">
+            <a
+              href="/"
+              onClick={(e) => {
+                e.preventDefault();
+                onNavigateHome();
+              }}
               className="hover:text-blue-400 transition-colors cursor-pointer"
             >
               Home
-            </button>
+            </a>
             <span>/</span>
-            <button
-              onClick={onNavigateProperties}
+            <a
+              href="/properties"
+              onClick={(e) => {
+                e.preventDefault();
+                onNavigateProperties();
+              }}
               className="hover:text-blue-400 transition-colors cursor-pointer"
             >
               Properties
-            </button>
+            </a>
             <span>/</span>
             <span className="text-emerald-400 font-semibold">Thank You</span>
-          </div>
+          </nav>
         </div>
       </div>
 

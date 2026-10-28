@@ -1,5 +1,7 @@
 import React from 'react';
 import { Building2, MapPin } from 'lucide-react';
+import { PROJECTS_DATA } from '../data/projectsData';
+import { getProjectSlug } from '../utils/slug';
 
 interface FooterProps {
   onNavigateSection: (sectionId: string) => void;
@@ -12,9 +14,13 @@ export const Footer: React.FC<FooterProps> = ({ onNavigateSection, onNavigateRou
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 pb-12 border-b border-slate-800">
           {/* 1. Company Logo & Short Description */}
-          <div className="md:col-span-6 lg:col-span-5 space-y-4">
-            <button
-              onClick={() => onNavigateRoute('/')}
+          <div className="md:col-span-5 lg:col-span-4 space-y-4">
+            <a
+              href="/"
+              onClick={(e) => {
+                e.preventDefault();
+                onNavigateRoute('/');
+              }}
               className="flex items-center gap-3 text-left cursor-pointer group"
             >
               <div className="w-10 h-10 rounded-lg bg-blue-600 text-white flex items-center justify-center shadow-xs group-hover:bg-blue-500 transition-colors">
@@ -28,79 +34,117 @@ export const Footer: React.FC<FooterProps> = ({ onNavigateSection, onNavigateRou
                   Kokapet, Hyderabad
                 </span>
               </div>
-            </button>
+            </a>
 
             <p className="text-slate-400 text-sm leading-relaxed max-w-md">
               A premium residential real estate discovery portal showcasing iconic high-rise apartments and luxury developments in Neopolis, Kokapet, Hyderabad.
             </p>
           </div>
 
-          {/* 2. Navigation & Contact Us */}
-          <div className="md:col-span-3 lg:col-span-3 space-y-3">
+          {/* 2. Navigation & Quick Links */}
+          <div className="md:col-span-3 lg:col-span-2 space-y-3">
             <h4 className="text-xs font-bold uppercase tracking-wider text-slate-200">
               Quick Links
             </h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <button
-                  onClick={() => onNavigateRoute('/properties/')}
+                <a
+                  href="/properties"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onNavigateRoute('/properties');
+                  }}
                   className="hover:text-blue-400 transition-colors cursor-pointer"
                 >
-                  Properties in Neopolis
-                </button>
+                  All Properties
+                </a>
               </li>
               <li>
                 <button
                   onClick={() => onNavigateSection('why-invest')}
-                  className="hover:text-blue-400 transition-colors cursor-pointer"
+                  className="hover:text-blue-400 transition-colors cursor-pointer text-left"
                 >
-                  Why Invest in Neopolis
+                  Why Invest
                 </button>
               </li>
               <li>
                 <button
                   onClick={() => onNavigateSection('location')}
-                  className="hover:text-blue-400 transition-colors cursor-pointer"
+                  className="hover:text-blue-400 transition-colors cursor-pointer text-left"
                 >
-                  Location &amp; Connectivity
+                  Location &amp; Map
                 </button>
               </li>
               <li>
                 <button
                   onClick={() => onNavigateSection('about')}
-                  className="hover:text-blue-400 transition-colors cursor-pointer"
+                  className="hover:text-blue-400 transition-colors cursor-pointer text-left"
                 >
-                  About Neopolis, Kokapet
+                  About Neopolis
                 </button>
               </li>
               <li>
                 <button
                   onClick={() => onNavigateSection('faqs')}
-                  className="hover:text-blue-400 transition-colors cursor-pointer"
+                  className="hover:text-blue-400 transition-colors cursor-pointer text-left"
                 >
-                  Frequently Asked Questions
+                  FAQs
                 </button>
               </li>
               <li>
-                <button
-                  onClick={() => onNavigateRoute('/contact/')}
+                <a
+                  href="/contact"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onNavigateRoute('/contact');
+                  }}
                   className="hover:text-blue-400 transition-colors cursor-pointer font-medium text-blue-300"
                 >
                   Contact Us
-                </button>
+                </a>
               </li>
             </ul>
           </div>
 
-          {/* 3. Site Office & Advisory Details */}
-          <div className="md:col-span-3 lg:col-span-4 space-y-3">
+          {/* 3. Featured Properties Deep Links */}
+          <div className="md:col-span-4 lg:col-span-3 space-y-3">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-200">
+              Featured Properties
+            </h4>
+            <ul className="space-y-2 text-xs">
+              {PROJECTS_DATA.map((p) => {
+                const slug = getProjectSlug(p);
+                return (
+                  <li key={p.id}>
+                    <a
+                      href={`/properties/${slug}`}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        onNavigateRoute(`/properties/${slug}`);
+                      }}
+                      className="hover:text-blue-400 transition-colors cursor-pointer truncate block"
+                      title={p.name}
+                    >
+                      {p.name}
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+
+          {/* 4. Site Office & Advisory Details */}
+          <div className="md:col-span-12 lg:col-span-3 space-y-3">
             <h4 className="text-xs font-bold uppercase tracking-wider text-slate-200">
               Office Address
             </h4>
-            <div className="space-y-2.5 text-sm">
-              <div className="flex items-start gap-2.5 text-slate-400">
+            <div className="space-y-2.5 text-xs text-slate-400">
+              <div className="flex items-start gap-2.5">
                 <MapPin className="w-4 h-4 text-blue-400 shrink-0 mt-0.5" />
-                <span>Sandhu Apartments, Mahatma Gandhi Rd, Tobacco Bazar, General Bazaar, Kalasiguda, Secunderabad, Telangana 500003</span>
+                <span>Sandhu Apartments, Mahatma Gandhi Rd, General Bazaar, Secunderabad, Telangana 500003</span>
+              </div>
+              <div className="pt-2 text-slate-500">
+                Operating Hours: 9:30 AM – 7:30 PM (7 Days a week)
               </div>
             </div>
           </div>
@@ -111,12 +155,34 @@ export const Footer: React.FC<FooterProps> = ({ onNavigateSection, onNavigateRou
           <p>© {new Date().getFullYear()} Neopolis Properties. All rights reserved.</p>
 
           <div className="flex items-center gap-6">
-            <button
-              onClick={() => onNavigateRoute('/contact/')}
+            <a
+              href="/properties"
+              onClick={(e) => {
+                e.preventDefault();
+                onNavigateRoute('/properties');
+              }}
+              className="hover:text-slate-300 transition-colors cursor-pointer"
+            >
+              Properties
+            </a>
+            <a
+              href="/contact"
+              onClick={(e) => {
+                e.preventDefault();
+                onNavigateRoute('/contact');
+              }}
               className="hover:text-slate-300 transition-colors cursor-pointer"
             >
               Contact Us
-            </button>
+            </a>
+            <a
+              href="/sitemap.xml"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-slate-300 transition-colors"
+            >
+              Sitemap
+            </a>
           </div>
         </div>
 
