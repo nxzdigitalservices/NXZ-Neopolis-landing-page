@@ -103,6 +103,18 @@ export const Footer: React.FC<FooterProps> = ({ onNavigateSection, onNavigateRou
                   Contact Us
                 </a>
               </li>
+              <li>
+                <a
+                  href="/privacy-policy"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onNavigateRoute('/privacy-policy');
+                  }}
+                  className="hover:text-blue-400 transition-colors cursor-pointer"
+                >
+                  Privacy Policy
+                </a>
+              </li>
             </ul>
           </div>
 
@@ -174,6 +186,16 @@ export const Footer: React.FC<FooterProps> = ({ onNavigateSection, onNavigateRou
               className="hover:text-slate-300 transition-colors cursor-pointer"
             >
               Contact Us
+            </a>
+            <a
+              href="/privacy-policy"
+              onClick={(e) => {
+                e.preventDefault();
+                onNavigateRoute('/privacy-policy');
+              }}
+              className="hover:text-slate-300 transition-colors cursor-pointer"
+            >
+              Privacy Policy
             </a>
             <a
               href="/sitemap.xml"

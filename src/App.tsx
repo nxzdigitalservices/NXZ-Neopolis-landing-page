@@ -13,6 +13,7 @@ import { ProjectDetailPage } from './components/ProjectDetailPage';
 import { ContactPage } from './components/ContactPage';
 import { ThankYouPage } from './components/ThankYouPage';
 import { NotFoundPage } from './components/NotFoundPage';
+import { PrivacyPolicyPage } from './components/PrivacyPolicyPage';
 import { PropertyEnquiryForm } from './components/PropertyEnquiryForm';
 import { RiseBy9Modal } from './components/RiseBy9Modal';
 import { PROJECTS_DATA, ProjectData } from './data/projectsData';
@@ -20,7 +21,7 @@ import { getProjectBySlug, getProjectSlug } from './utils/slug';
 import { getPageMetadata, updateDocumentSEO } from './utils/seo';
 import { X } from 'lucide-react';
 
-type RouteType = 'home' | 'properties' | 'project' | 'contact' | 'thank-you' | 'not-found';
+type RouteType = 'home' | 'properties' | 'project' | 'contact' | 'thank-you' | 'privacy-policy' | 'not-found';
 
 interface ResolvedRoute {
   type: RouteType;
@@ -47,6 +48,9 @@ function resolveRouteFromPath(rawPathname: string): ResolvedRoute {
   }
   if (cleanPath === '/thank-you') {
     return { type: 'thank-you', pathname: '/thank-you', project: null };
+  }
+  if (cleanPath === '/privacy-policy') {
+    return { type: 'privacy-policy', pathname: '/privacy-policy', project: null };
   }
   if (cleanPath.startsWith('/properties/')) {
     const slug = cleanPath.replace(/^\/properties\//, '');
@@ -225,6 +229,13 @@ export default function App() {
             onNavigateHome={() => navigateTo('/')}
             onNavigateProperties={() => navigateTo('/properties')}
             onSelectProject={handleOpenProjectDetails}
+          />
+        ) : routeState.type === 'privacy-policy' ? (
+          /* Dedicated Privacy Policy Page at /privacy-policy */
+          <PrivacyPolicyPage
+            onNavigateHome={() => navigateTo('/')}
+            onNavigateProperties={() => navigateTo('/properties')}
+            onNavigateContact={() => navigateTo('/contact')}
           />
         ) : routeState.type === 'not-found' ? (
           /* 404 Not Found Page for invalid URLs */

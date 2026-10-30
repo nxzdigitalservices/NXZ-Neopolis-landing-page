@@ -227,7 +227,41 @@ export function getPageMetadata(
     };
   }
 
-  // 5. 404 Not Found Page
+  // 5. Privacy Policy Page (/privacy-policy)
+  if (cleanPath === '/privacy-policy') {
+    const title = 'Privacy Policy – Neopolis Properties | Data Protection & Terms';
+    const description = 'Privacy policy and data protection practices of Neopolis Properties, operated by NXZ Designing & Engineering Services, in compliance with DPDP Act 2023.'.slice(0, 160);
+
+    return {
+      title,
+      description,
+      canonical,
+      robots: 'index, follow',
+      og: {
+        title,
+        description,
+        url: canonical,
+        image: DEFAULT_IMAGE,
+        type: 'website',
+        siteName: BRAND_NAME
+      },
+      twitter: {
+        card: 'summary',
+        title,
+        description,
+        image: DEFAULT_IMAGE
+      },
+      jsonLd: {
+        '@context': 'https://schema.org',
+        '@type': 'WebPage',
+        'name': 'Privacy Policy – Neopolis Properties',
+        'description': description,
+        'url': canonical
+      }
+    };
+  }
+
+  // 6. 404 Not Found Page
   if (cleanPath === '/404' || cleanPath.startsWith('/404')) {
     const title = 'Page Not Found (404) | Neopolis Luxury Residences';
     const description = 'The requested property or page could not be found. Explore current luxury residential apartments in Neopolis, Kokapet, Hyderabad.';

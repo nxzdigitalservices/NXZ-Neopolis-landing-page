@@ -148,6 +148,7 @@ function generateSitemapXml(baseUrl: string): string {
     { loc: `${baseUrl}/`, priority: '1.0', changefreq: 'daily' },
     { loc: `${baseUrl}/properties`, priority: '0.9', changefreq: 'daily' },
     { loc: `${baseUrl}/contact`, priority: '0.7', changefreq: 'monthly' },
+    { loc: `${baseUrl}/privacy-policy`, priority: '0.5', changefreq: 'monthly' },
     ...PROJECTS.map((p) => ({
       loc: `${baseUrl}/properties/${p.id}`,
       priority: '0.8',
@@ -253,6 +254,21 @@ function resolveSeoMetadata(cleanPath: string, project: ProjectInfo | null, base
       og: { title, description, url: canonical, image: DEFAULT_IMAGE, type: 'website' },
       twitter: { card: 'summary', title, description, image: DEFAULT_IMAGE },
       jsonLd: { '@context': 'https://schema.org', '@type': 'WebPage', name: title }
+    };
+  }
+
+  if (cleanPath === '/privacy-policy') {
+    const canonical = `${baseUrl}/privacy-policy`;
+    const title = 'Privacy Policy – Neopolis Properties | Data Protection & Terms';
+    const description = 'Privacy policy and data protection practices of Neopolis Properties, operated by NXZ Designing & Engineering Services, in compliance with DPDP Act 2023.'.slice(0, 160);
+    return {
+      title,
+      description,
+      canonical,
+      robots: 'index, follow',
+      og: { title, description, url: canonical, image: DEFAULT_IMAGE, type: 'website' },
+      twitter: { card: 'summary', title, description, image: DEFAULT_IMAGE },
+      jsonLd: { '@context': 'https://schema.org', '@type': 'WebPage', name: 'Privacy Policy – Neopolis Properties', description, url: canonical }
     };
   }
 
@@ -431,7 +447,7 @@ async function startServer() {
           matchedProject = findProjectBySlug(slug) || null;
         }
 
-        const isKnownStatic = cleanPath === '/' || cleanPath === '/properties' || cleanPath === '/contact' || cleanPath === '/thank-you';
+        const isKnownStatic = cleanPath === '/' || cleanPath === '/properties' || cleanPath === '/contact' || cleanPath === '/thank-you' || cleanPath === '/privacy-policy';
         const isKnownProperty = cleanPath.startsWith('/properties/') && !!matchedProject;
         const isNotFound = !isKnownStatic && !isKnownProperty;
 
@@ -478,7 +494,7 @@ async function startServer() {
           matchedProject = findProjectBySlug(slug) || null;
         }
 
-        const isKnownStatic = cleanPath === '/' || cleanPath === '/properties' || cleanPath === '/contact' || cleanPath === '/thank-you';
+        const isKnownStatic = cleanPath === '/' || cleanPath === '/properties' || cleanPath === '/contact' || cleanPath === '/thank-you' || cleanPath === '/privacy-policy';
         const isKnownProperty = cleanPath.startsWith('/properties/') && !!matchedProject;
         const isNotFound = !isKnownStatic && !isKnownProperty;
 

@@ -120,6 +120,7 @@ function generateSitemapXml(baseUrl) {
     { loc: `${baseUrl}/`, priority: "1.0", changefreq: "daily" },
     { loc: `${baseUrl}/properties`, priority: "0.9", changefreq: "daily" },
     { loc: `${baseUrl}/contact`, priority: "0.7", changefreq: "monthly" },
+    { loc: `${baseUrl}/privacy-policy`, priority: "0.5", changefreq: "monthly" },
     ...PROJECTS.map((p) => ({
       loc: `${baseUrl}/properties/${p.id}`,
       priority: "0.8",
@@ -217,6 +218,20 @@ function resolveSeoMetadata(cleanPath, project, baseUrl) {
       og: { title: title2, description: description2, url: canonical2, image: DEFAULT_IMAGE, type: "website" },
       twitter: { card: "summary", title: title2, description: description2, image: DEFAULT_IMAGE },
       jsonLd: { "@context": "https://schema.org", "@type": "WebPage", name: title2 }
+    };
+  }
+  if (cleanPath === "/privacy-policy") {
+    const canonical2 = `${baseUrl}/privacy-policy`;
+    const title2 = "Privacy Policy \u2013 Neopolis Properties | Data Protection & Terms";
+    const description2 = "Privacy policy and data protection practices of Neopolis Properties, operated by NXZ Designing & Engineering Services, in compliance with DPDP Act 2023.".slice(0, 160);
+    return {
+      title: title2,
+      description: description2,
+      canonical: canonical2,
+      robots: "index, follow",
+      og: { title: title2, description: description2, url: canonical2, image: DEFAULT_IMAGE, type: "website" },
+      twitter: { card: "summary", title: title2, description: description2, image: DEFAULT_IMAGE },
+      jsonLd: { "@context": "https://schema.org", "@type": "WebPage", name: "Privacy Policy \u2013 Neopolis Properties", description: description2, url: canonical2 }
     };
   }
   if (cleanPath === "/404") {
@@ -368,7 +383,7 @@ Sitemap: ${baseUrl}/sitemap.xml
           const slug = cleanPath.replace(/^\/properties\/?/, "");
           matchedProject = findProjectBySlug(slug) || null;
         }
-        const isKnownStatic = cleanPath === "/" || cleanPath === "/properties" || cleanPath === "/contact" || cleanPath === "/thank-you";
+        const isKnownStatic = cleanPath === "/" || cleanPath === "/properties" || cleanPath === "/contact" || cleanPath === "/thank-you" || cleanPath === "/privacy-policy";
         const isKnownProperty = cleanPath.startsWith("/properties/") && !!matchedProject;
         const isNotFound = !isKnownStatic && !isKnownProperty;
         const effectivePath = isNotFound ? "/404" : cleanPath;
@@ -406,7 +421,7 @@ Sitemap: ${baseUrl}/sitemap.xml
           const slug = cleanPath.replace(/^\/properties\/?/, "");
           matchedProject = findProjectBySlug(slug) || null;
         }
-        const isKnownStatic = cleanPath === "/" || cleanPath === "/properties" || cleanPath === "/contact" || cleanPath === "/thank-you";
+        const isKnownStatic = cleanPath === "/" || cleanPath === "/properties" || cleanPath === "/contact" || cleanPath === "/thank-you" || cleanPath === "/privacy-policy";
         const isKnownProperty = cleanPath.startsWith("/properties/") && !!matchedProject;
         const isNotFound = !isKnownStatic && !isKnownProperty;
         const effectivePath = isNotFound ? "/404" : cleanPath;
