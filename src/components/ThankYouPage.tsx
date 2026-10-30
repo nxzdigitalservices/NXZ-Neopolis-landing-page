@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { CheckCircle2, Building2, Phone, MessageSquare, ArrowRight, Home, ShieldCheck, Clock, Sparkles } from 'lucide-react';
+import { CheckCircle2, Building2, ArrowRight, Home, Sparkles } from 'lucide-react';
 import { PROJECTS_DATA, ProjectData } from '../data/projectsData';
 
 interface ThankYouPageProps {
@@ -126,46 +126,23 @@ export const ThankYouPage: React.FC<ThankYouPageProps> = ({
           </div>
 
           {/* Quick Action Buttons */}
-          <div className="pt-4 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
-              <button
-                onClick={onNavigateProperties}
-                className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-bold text-sm shadow-sm transition-all cursor-pointer"
-              >
-                <Building2 className="w-4 h-4" />
-                <span>Explore All Properties</span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
+          <div className="pt-4 border-t border-slate-200 flex flex-wrap items-center gap-3">
+            <button
+              onClick={onNavigateProperties}
+              className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-bold text-sm shadow-sm transition-all cursor-pointer"
+            >
+              <Building2 className="w-4 h-4" />
+              <span>Explore All Properties</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
 
-              <button
-                onClick={onNavigateHome}
-                className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-800 font-semibold text-sm transition-all cursor-pointer"
-              >
-                <Home className="w-4 h-4" />
-                <span>Back to Home</span>
-              </button>
-            </div>
-
-            {/* Instant Contact Options */}
-            <div className="flex items-center gap-3 w-full sm:w-auto justify-end">
-              <a
-                href="https://api.whatsapp.com/send?phone=919876543210&text=Hi%2C%20I%20just%20submitted%20an%20enquiry%20for%20Neopolis%20properties%20and%20would%20like%20more%20details."
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-xs transition-colors"
-              >
-                <MessageSquare className="w-4 h-4" />
-                <span>WhatsApp Now</span>
-              </a>
-
-              <a
-                href="tel:+919876543210"
-                className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs shadow-xs transition-colors"
-              >
-                <Phone className="w-4 h-4" />
-                <span>Call Advisory</span>
-              </a>
-            </div>
+            <button
+              onClick={onNavigateHome}
+              className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-800 font-semibold text-sm transition-all cursor-pointer"
+            >
+              <Home className="w-4 h-4" />
+              <span>Back to Home</span>
+            </button>
           </div>
         </div>
 
