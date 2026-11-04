@@ -648,7 +648,7 @@ export const PROJECTS_DATA: ProjectData[] = [
     location: 'Neopolis, Kokapet, Hyderabad',
     propertyType: 'Art Deco Iconic Sky Residences',
     configurations: ['3 BHK', '4 BHK'],
-    startingPrice: '₹3.80 Cr*',
+    startingPrice: '₹2.90 Cr*',
     priceNote: 'Starting price upon request',
     statusBadge: 'Luxury Landmark',
     statusType: 'landmark',
@@ -717,7 +717,7 @@ export const PROJECTS_DATA: ProjectData[] = [
         amenities: '₹750 / sq.ft',
         carParking: '₹12 Lakh lump sum',
         ceilingHeight: '11.5 ft',
-        range: '₹3.80 Cr (3,200 SFT) to ₹4.60 Cr'
+        range: '₹2.90 Cr (3,200 SFT) to ₹4.60 Cr'
       }
     },
     paymentPlan: {

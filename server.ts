@@ -68,7 +68,7 @@ const PROJECTS: ProjectInfo[] = [
     location: 'Neopolis, Kokapet, Hyderabad',
     propertyType: 'Art Deco Iconic Sky Residences',
     configurations: ['3 BHK', '4 BHK'],
-    startingPrice: '₹3.80 Cr*',
+    startingPrice: '₹2.90 Cr*',
     image: '/projects/godrej-epoque/1.webp',
     areaRange: '3,200 – 4,800 sq.ft.',
     reraNumber: 'P02400006240'
