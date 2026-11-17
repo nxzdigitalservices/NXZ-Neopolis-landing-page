@@ -83,6 +83,22 @@ export interface ProjectData {
       range: string;
     };
   };
+  exclusivePricingChart?: {
+    title?: string;
+    subtitle?: string;
+    reraNote?: string;
+    rows: {
+      typology: string;
+      sizeSqFt: string;
+      price: string;
+      eoiOffer: string;
+      spotOffer: string;
+      totalBenefit: string;
+      newPrice: string;
+    }[];
+    inclusions: string;
+    exclusions: string;
+  };
 }
 
 export const PROJECTS_DATA: ProjectData[] = [
@@ -648,12 +664,12 @@ export const PROJECTS_DATA: ProjectData[] = [
     location: 'Neopolis, Kokapet, Hyderabad',
     propertyType: 'Art Deco Iconic Sky Residences',
     configurations: ['3 BHK', '4 BHK'],
-    startingPrice: '₹2.90 Cr*',
-    priceNote: 'Starting price upon request',
+    startingPrice: '₹2.60 Cr*',
+    priceNote: 'Effective New Price ₹2.60 Cr* – ₹4.35 Cr* (after up to ₹30L EOI + 10% Spot Offer)',
     statusBadge: 'Luxury Landmark',
     statusType: 'landmark',
     isDetailed: true,
-    areaRange: '3,200 – 4,800 sq.ft.',
+    areaRange: '1,960 – 3,236 sq.ft.',
     image: '/projects/godrej-epoque/1.webp',
     imageAlt: 'Godrej Epoque 57-storey art deco luxury skyscraper in Neopolis Kokapet',
     gallery: [
@@ -664,26 +680,26 @@ export const PROJECTS_DATA: ProjectData[] = [
       '/projects/godrej-epoque/5.webp'
     ],
     headline: 'An Iconic Expression of Contemporary Luxury',
-    description: 'Godrej Epoque is a prestigious 57-storey luxury landmark by Godrej Properties, dominating the vibrant skyline of Neopolis, Kokapet. Drawing inspiration from classic Art Deco geometric elegance, the development features striking vertical lines and grand colonnades, presenting 3 and 4 BHK palatial residences spanning from 3,200 to 4,800 sq.ft.\n\nA standout feature of this landmark is the high-altitude Sky Bridge connecting the towers, featuring exclusive resident lounges and stargazing platforms. The community includes a 100% vehicle-free landscaped podium with Miyawaki forest trails, a rooftop heated infinity pool overlooking the Financial District, and biometric smart access for every home.\n\nLocated just minutes from the Kokapet Trumpet Interchange, Godrej Epoque ensures effortless connectivity to major tech hubs and international schools. Registered under Telangana RERA (P02400006240), the project features flexible milestone payment options, representing an elite investment in Hyderabad\'s premier skyscraper enclave.',
+    description: 'Godrej Epoque is a prestigious 57-storey luxury landmark by Godrej Properties, dominating the vibrant skyline of Neopolis, Kokapet. Drawing inspiration from classic Art Deco geometric elegance, the development features striking vertical lines and grand colonnades, presenting curated 3 BHK Premium (1,960 sq.ft.), 3 BHK Luxe (2,200 – 2,500 sq.ft.), 3 BHK Grande (2,700 sq.ft.), and 4 BHK Grande (3,150 – 3,236 sq.ft.) residences.\n\nA standout feature of this landmark is the high-altitude Sky Bridge connecting the towers, featuring exclusive resident lounges and stargazing platforms. The community includes a 100% vehicle-free landscaped podium with Miyawaki forest trails, a rooftop heated infinity pool overlooking the Financial District, and biometric smart access for every home.\n\nLocated just minutes from the Kokapet Trumpet Interchange, Godrej Epoque ensures effortless connectivity to major tech hubs and international schools. Registered under Telangana RERA (P02400011291, Permit No: 2439/HMDA/SWBP/2026), prices include HVAC, car park, clubhouse, infrastructure, and amenities costs, with exclusive EOI and 10% spot booking benefits up to ₹30 Lakhs.',
     keyHighlights: [
       '57-Storey landmark towers with Art Deco architectural geometry and ornamental crowns',
+      'Curated typologies: 3 BHK Premium (1,960 sq.ft.), Luxe (2,200–2,500 sq.ft.), Grande (2,700 sq.ft.) & 4 BHK Grande (3,150–3,236 sq.ft.)',
+      'Effective New Prices starting at ₹2.60 Cr* with EOI + 10% Spot Offer benefits up to ₹30 Lakhs',
+      'All-inclusive base price covering HVAC, car parking, clubhouse, infra & amenities cost',
       'High-altitude Sky Bridge connecting towers with panoramic sky lounges and observation decks',
       '100% vehicle-free landscaped podium with native Miyawaki woodlands and water features',
-      'Palatial 3 & 4 BHK residences offering ultra-spacious layouts from 3,200 to 4,800 sq.ft.',
-      'Rooftop heated infinity pool with sweeping views across the Financial District horizon',
-      'Biometric smart lock access, imported marble flooring, and acoustic sound insulation',
       'Merely ~5 minutes from Kokapet Trumpet Interchange and the Outer Ring Road corridor',
-      'Registered with Telangana RERA (Registration No: P02400006240)'
+      'TS RERA Registered (P02400011291) | HMDA Permit No: 2439/HMDA/SWBP/2026'
     ],
     keySpecs: [
       { label: 'Floors', value: '57 Storeys' },
       { label: 'Architecture', value: 'Art Deco Geometric Design' },
-      { label: 'Signature Feature', value: 'High-Altitude Sky Bridge' },
-      { label: 'Podium', value: '100% Vehicle-Free Landscaped' },
-      { label: 'Ceiling Height', value: '12.0 ft Floor-to-Floor' },
-      { label: 'Configurations', value: '3 & 4 BHK Luxury Residences' },
-      { label: 'Sizes', value: '3,200 – 4,800 sq.ft.' },
-      { label: 'RERA Number', value: 'P02400006240' },
+      { label: 'Typologies', value: '3 BHK (Premium, Luxe, Grande) & 4 BHK Grande' },
+      { label: 'Sizes', value: '1,960 – 3,236 sq.ft.' },
+      { label: 'Starting New Price', value: '₹2.60 Cr* (After ₹15L Benefit)' },
+      { label: 'Inclusions', value: 'HVAC, Car Park, Clubhouse & Infra' },
+      { label: 'RERA Number', value: 'P02400011291' },
+      { label: 'HMDA Permit No', value: '2439/HMDA/SWBP/2026' },
       { label: 'Possession', value: '2028 (Under Construction)' }
     ],
     amenities: [
@@ -696,29 +712,50 @@ export const PROJECTS_DATA: ProjectData[] = [
       { name: 'Banquet Hall & Al Fresco Dining Courtyards', category: 'Hospitality' },
       { name: 'EV Charging Enabled Covered Multi-Level Parking', category: 'Infrastructure' }
     ],
-    pricingBreakdown: {
-      towerA: {
-        title: 'Sky Bridge Signature Towers (Floors 35–57)',
-        basePrice: '₹11,200 / sq.ft',
-        floorRise: '₹35 / sq.ft per floor (from 5th floor)',
-        facingPremium: '₹250 / sq.ft (Financial District Skyline)',
-        cornerPremium: '₹175 / sq.ft',
-        amenities: '₹750 / sq.ft',
-        carParking: '₹15 Lakh lump sum',
-        ceilingHeight: '12.0 ft',
-        range: '₹5.50 Cr (4,800 SFT) to ₹6.10 Cr'
-      },
-      towerBC: {
-        title: 'Horizon Residences (Floors 5–34)',
-        basePrice: '₹10,650 / sq.ft',
-        floorRise: '₹30 / sq.ft per floor (from 5th floor)',
-        facingPremium: '₹200 / sq.ft (East / Green Vista)',
-        cornerPremium: '₹150 / sq.ft',
-        amenities: '₹750 / sq.ft',
-        carParking: '₹12 Lakh lump sum',
-        ceilingHeight: '11.5 ft',
-        range: '₹2.90 Cr (3,200 SFT) to ₹4.60 Cr'
-      }
+    exclusivePricingChart: {
+      title: 'Godrej Epoque — Exclusive Pricing Chart',
+      subtitle: 'Official typology-wise sizing, EOI offers, 10% spot booking benefits, and effective new prices.',
+      reraNote: 'RERA No: P02400011291 | Permit No: 2439/HMDA/SWBP/2026 | Available at https://rera.telangana.gov.in',
+      rows: [
+        {
+          typology: '3 BHK Premium',
+          sizeSqFt: '1,960 sq.ft.',
+          price: '₹2.75 Cr*',
+          eoiOffer: '₹8L',
+          spotOffer: '₹7L',
+          totalBenefit: '₹15L',
+          newPrice: '₹2.60 Cr*'
+        },
+        {
+          typology: '3 BHK Luxe',
+          sizeSqFt: '2,200 – 2,500 sq.ft.',
+          price: '₹3.30 Cr*',
+          eoiOffer: '₹12L',
+          spotOffer: '₹8L',
+          totalBenefit: '₹20L',
+          newPrice: '₹3.10 Cr*'
+        },
+        {
+          typology: '3 BHK Grande',
+          sizeSqFt: '2,700 sq.ft.',
+          price: '₹3.85 Cr*',
+          eoiOffer: '₹15L',
+          spotOffer: '₹10L',
+          totalBenefit: '₹25L',
+          newPrice: '₹3.60 Cr*'
+        },
+        {
+          typology: '4 BHK Grande',
+          sizeSqFt: '3,150 – 3,236 sq.ft.',
+          price: '₹4.65 Cr*',
+          eoiOffer: '₹20L',
+          spotOffer: '₹10L',
+          totalBenefit: '₹30L',
+          newPrice: '₹4.35 Cr*'
+        }
+      ],
+      inclusions: 'Includes HVAC, Car Park, Clubhouse, Infra & Amenities Cost.',
+      exclusions: 'Floor Rise, Premium Location Charges & Taxes are additional.'
     },
     paymentPlan: {
       scheme: '25:25:25:25 Flexible Stage Plan',
@@ -729,60 +766,104 @@ export const PROJECTS_DATA: ProjectData[] = [
         { milestone: 'On Completion of Superstructure Terrace Slab', percentage: '25%' },
         { milestone: 'On Notice of Possession & Keys Allotment', percentage: '25%' }
       ],
-      notes: 'No floor rise escalation charges on selected early allotment inventory.'
+      notes: 'Total EOI + 10% Spot Offer benefits of ₹15L to ₹30L applicable as per typology.'
     },
     floorPlans: [
       {
-        id: 'ge-3bhk',
-        bhk: '3 BHK',
-        name: '3 Bedroom Art Deco Suite',
-        superBuiltUpArea: '3,200 sq.ft.',
-        carpetArea: '2,310 sq.ft.',
+        id: 'ge-3bhk-premium',
+        bhk: '3 BHK Premium',
+        name: '3 BHK Premium Residence (New Price: ₹2.60 Cr*)',
+        superBuiltUpArea: '1,960 sq.ft.',
         bedrooms: '3 Beds',
         bathrooms: '3 Baths',
-        balconies: 'Skyline Viewing Deck',
+        balconies: 'Skyline Viewing Balcony',
         facing: 'East / North',
         keyFeatures: [
-          'High-altitude living room with expansive skyline horizons',
-          'Bespoke Art Deco geometric finishes and tall double-glazed glass',
-          'Private foyer with smart biometric entry lock'
+          'Original Price: ₹2.75 Cr* | Total Benefit: ₹15L (₹8L EOI + ₹7L 10% Spot Offer)',
+          'Effective New Price: ₹2.60 Cr* (Includes HVAC, Car Park, Clubhouse, Infra & Amenities)',
+          'Efficient Art Deco layout with tall double-glazed windows and smart biometric lock'
         ],
         roomDimensions: {
-          livingDining: '30’ 0” × 18’ 0”',
-          masterBedroom: '19’ 6” × 15’ 0”',
-          bedroom2: '16’ 0” × 13’ 6”',
-          bedroom3: '15’ 0” × 13’ 0”',
-          kitchen: '14’ 6” × 11’ 0”',
-          balconies: '24’ 0” × 7’ 0”'
+          livingDining: '22’ 0” × 13’ 0”',
+          masterBedroom: '15’ 0” × 12’ 0”',
+          bedroom2: '13’ 0” × 11’ 0”',
+          bedroom3: '12’ 0” × 10’ 6”',
+          kitchen: '11’ 6” × 9’ 0”',
+          balconies: '14’ 0” × 5’ 6”'
         }
       },
       {
-        id: 'ge-4bhk',
-        bhk: '4 BHK',
-        name: '4 Bedroom Epoque Presidential',
-        superBuiltUpArea: '4,800 sq.ft.',
-        carpetArea: '3,520 sq.ft.',
-        bedrooms: '4 Beds',
-        bathrooms: '5 Baths',
-        balconies: 'Corner 360° Viewing Terraces',
-        facing: 'Corner Skyline View',
+        id: 'ge-3bhk-luxe',
+        bhk: '3 BHK Luxe',
+        name: '3 BHK Luxe Residence (New Price: ₹3.10 Cr*)',
+        superBuiltUpArea: '2,200 – 2,500 sq.ft.',
+        bedrooms: '3 Beds',
+        bathrooms: '3 Baths',
+        balconies: 'Wide Deck Balcony',
+        facing: 'East / West / North',
         keyFeatures: [
-          'Direct access to 57th-floor observatory and Sky Bridge',
-          'Double-height ceiling option in formal living salon',
-          'Corner 360° viewing terraces with panoramic Financial District views'
+          'Original Price: ₹3.30 Cr* | Total Benefit: ₹20L (₹12L EOI + ₹8L 10% Spot Offer)',
+          'Effective New Price: ₹3.10 Cr* (Includes HVAC, Car Park, Clubhouse, Infra & Amenities)',
+          'Expansive living-dining salon with walk-in wardrobe space and utility terrace'
         ],
         roomDimensions: {
-          livingDining: '38’ 0” × 22’ 0”',
-          masterBedroom: '23’ 0” × 17’ 0”',
-          bedroom2: '18’ 0” × 14’ 6”',
-          bedroom3: '17’ 0” × 14’ 0”',
-          bedroom4: '15’ 6” × 13’ 0”',
-          kitchen: '18’ 0” × 12’ 6”',
-          balconies: '32’ 0” × 8’ 0”'
+          livingDining: '25’ 0” × 14’ 6”',
+          masterBedroom: '16’ 6” × 13’ 0”',
+          bedroom2: '14’ 0” × 11’ 6”',
+          bedroom3: '13’ 0” × 11’ 0”',
+          kitchen: '12’ 6” × 10’ 0”',
+          balconies: '18’ 0” × 6’ 0”'
+        }
+      },
+      {
+        id: 'ge-3bhk-grande',
+        bhk: '3 BHK Grande',
+        name: '3 BHK Grande Residence (New Price: ₹3.60 Cr*)',
+        superBuiltUpArea: '2,700 sq.ft.',
+        bedrooms: '3 Beds',
+        bathrooms: '3.5 Baths',
+        balconies: 'Grand Skyline Viewing Deck',
+        facing: 'East / North',
+        keyFeatures: [
+          'Original Price: ₹3.85 Cr* | Total Benefit: ₹25L (₹15L EOI + ₹10L 10% Spot Offer)',
+          'Effective New Price: ₹3.60 Cr* (Includes HVAC, Car Park, Clubhouse, Infra & Amenities)',
+          'Large-format 3 BHK layout with private foyer, powder room, and helper room'
+        ],
+        roomDimensions: {
+          livingDining: '27’ 6” × 16’ 0”',
+          masterBedroom: '17’ 6” × 13’ 6”',
+          bedroom2: '14’ 6” × 12’ 0”',
+          bedroom3: '13’ 6” × 12’ 0”',
+          kitchen: '13’ 6” × 10’ 6”',
+          balconies: '20’ 0” × 6’ 6”'
+        }
+      },
+      {
+        id: 'ge-4bhk-grande',
+        bhk: '4 BHK Grande',
+        name: '4 BHK Grande Residence (New Price: ₹4.35 Cr*)',
+        superBuiltUpArea: '3,150 – 3,236 sq.ft.',
+        bedrooms: '4 Beds',
+        bathrooms: '4.5 Baths',
+        balconies: 'Corner Panoramic Viewing Terraces',
+        facing: 'Corner Skyline View',
+        keyFeatures: [
+          'Original Price: ₹4.65 Cr* | Total Benefit: ₹30L (₹20L EOI + ₹10L 10% Spot Offer)',
+          'Effective New Price: ₹4.35 Cr* (Includes HVAC, Car Park, Clubhouse, Infra & Amenities)',
+          'Flagship 4 BHK residence with formal & family lounges and panoramic corner views'
+        ],
+        roomDimensions: {
+          livingDining: '30’ 0” × 18’ 0”',
+          masterBedroom: '19’ 0” × 14’ 6”',
+          bedroom2: '15’ 6” × 13’ 0”',
+          bedroom3: '14’ 6” × 12’ 6”',
+          bedroom4: '14’ 0” × 12’ 0”',
+          kitchen: '15’ 0” × 11’ 0”',
+          balconies: '24’ 0” × 7’ 0”'
         }
       }
     ],
-    reraNumber: 'P02400006240',
+    reraNumber: 'P02400011291',
     possessionYear: '2028',
     ctaLabel: 'Enquire About Godrej Epoque',
     developerName: 'Godrej Properties'

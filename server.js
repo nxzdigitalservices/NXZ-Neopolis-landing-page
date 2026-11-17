@@ -53,10 +53,10 @@ var PROJECTS = [
     location: "Neopolis, Kokapet, Hyderabad",
     propertyType: "Art Deco Iconic Sky Residences",
     configurations: ["3 BHK", "4 BHK"],
-    startingPrice: "\u20B92.90 Cr*",
+    startingPrice: "\u20B92.60 Cr*",
     image: "/projects/godrej-epoque/1.webp",
-    areaRange: "3,200 \u2013 4,800 sq.ft.",
-    reraNumber: "P02400006240"
+    areaRange: "1,960 \u2013 3,236 sq.ft.",
+    reraNumber: "P02400011291"
   },
   {
     id: "sattva-lago-phase-2",
